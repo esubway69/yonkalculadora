@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de drogas</title>
+  <meta name="description" content="Calculadora de drogas basada en dosis mínimas psicoactivas de sustancias controladas.">
+  <style>
+    /* Variables de color y configuración para tema oscuro */
+    :root {
+      --primary-color: #e74c3c;
+      --primary-hover: #c0392b;
+      --background: #222;       /* Fondo general oscuro */
+      --container-bg: #333;      /* Fondo del contenedor oscuro */
+      --text-color: #fff;        /* Texto en blanco */
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--background);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--text-color);
+    }
+    .container {
+      background: var(--container-bg);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 300px;
+      border-radius: 5px;
+      border: none;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    /* Sección para imagen y explicación en dos columnas */
+    #substanceInfo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .image-container {
+      flex: 1;
+      min-width: 250px;
+    }
+    .image-container img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .explanation {
+      flex: 1;
+      min-width: 250px;
+    }
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: none;
+    }
+    .info {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .info a {
+      text-decoration: none;
+    }
+    .info a.poder-judicial {
+      color: green;
+    }
+    .info a.guard-ia {
+      color: red;
+    }
+    /* Media query para mejorar la responsividad */
+    @media (max-width: 480px) {
+      input, select, button {
+        max-width: 100%;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>YONKalculadora</h1>
+    <form id="offenseForm">
+      <!-- Campo de selección de sustancia primero -->
+      <label for="drugType">Tipo de sustancia:</label>
+      <select id="drugType" name="drugType" required="">
+        <option value="" disabled="" selected="">--Selecciona una opción--</option>
+		<option value="cocaina" data-limit="15" data-image="yonkalculadora_files/images/cocaina.jpg" data-explanation="COCAINA, también llamada Nieve, Perico, Speedball, Pasta, Crack, Free Base, Basuco o Kisa. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;15 gramos&lt;/span&gt; ">COCAINA (gr)</option>
+        <option value="mdma" data-limit="3" data-image="yonkalculadora_files/images/mdma.jpg" data-explanation="MDMA, tambíen llamada Extasis, Tusi, Coca Rosa, XTC, Adam o M&M. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;3 gramos&lt;/span&gt; ">MDMA (gr)</option>
+        <option value="pastillas" data-limit="20" data-image="yonkalculadora_files/images/pastis.jpg" data-explanation="PASTILLAS DE SINTESIS, también llamada Pildora del Amor, MDEA, MDA o EVA. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;20 pastillas&lt;/span&gt; ">PASTILLAS DE SINTESIS (Unidades)</option>
+        <option value="hachis" data-limit="50" data-image="yonkalculadora_files/images/hachis.jpg" data-explanation="HACHÍS, también llamado Costo, Grifa o Chocolate. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;50 gramos&lt;/span&gt; ">HACHÍS (gr)</option>
+        <option value="heroina" data-limit="8" data-image="yonkalculadora_files/images/heroina.jpg" data-explanation="HEROINA, también llamada Cavallo, Brown Sugar, Jaco, Potro, White Lady o Reina. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;8 gramos&lt;/span&gt; ">HEROINA (gr)</option>
+        <option value="marihuana" data-limit="100" data-image="yonkalculadora_files/images/marihuana.jpg" data-explanation="MARIHUANA, también llamada Herva, Grifa o Maria. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;100 gramos&lt;/span&gt; ">MARIHUANA (gr)</option>
+        <option value="metanfetamina" data-limit="0.7" data-image="yonkalculadora_files/images/metanfetamina.jpg" data-explanation="METAMFETAMINA, también llamada Cristal, Speed, Anfetamina, Shabú, Tina. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;0,7 gramos&lt;/span&gt; ">METAMFETAMINA (gr)</option>
+        <option value="ketamina" data-limit="1" data-image="yonkalculadora_files/images/ketamina.jpg" data-explanation="KETAMINA. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;1 gramo&lt;/span&gt; ">KETAMINA (gr)</option>
+        <option value="ghb" data-limit="105" data-image="yonkalculadora_files/images/ghb.jpg" data-explanation="GHB, también llamado GBL o Extasis Liquido. La cantidad máxima que no se considera destinada al trafico de drogas es de &lt;span style=&#39;color:red;&#39;&gt;105 gramos o mililitros&lt;/span&gt; ">GHB (gr)</option>
+        
+		</select>
+      
+      <!-- Campo de cantidad ahora se muestra después -->
+      <label for="quantity">Cantidad (gramos o unidades según la sustancia):</label>
+      <input type="number" id="quantity" name="quantity" placeholder="Ingresa la cantidad" required="" min="0.01" step="any">
+      
+      <button type="submit" id="calculateButton">Calcular Infracción</button>
+    </form>
+    
+    <div id="result" role="alert"></div>
+    
+    <!-- Sección para imagen y explicación en dos columnas -->
+    <div id="substanceInfo" style="display: none;">
+      <div class="image-container" id="drugImage">
+        <img src="https://onefrai.github.io/clasificador-infracciones/" alt="Imagen de la sustancia">
+      </div>
+      <div class="explanation" id="explanationText"></div>
+    </div>
+    
+    <div class="info">
+      <p>Fuente: <a class="poder-judicial" href="https://www.poderjudicial.es/cgpj/es/Poder-Judicial/Tribunal-Supremo/Actividad-del-TS/Estudios/Cuadros-de-cantidades-de-notoria-importancia-y-dosis-minimas-psicoactivas-de-las-principales-sustancias-toxicas-objeto-de-trafico-de-drogas--actualmente-vigente" target="_blank" rel="noopener">Tabla oficial del Poder Judicial</a></p>
+    </div>
+  </main>
+  
+  <canvas class="confetti" id="confettiCanvas"></canvas>
+  
+  <!-- Carga de la librería para confeti -->
+  <script src="./yonkalculadora_files/canvas-confetti@1.3.1"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('offenseForm');
+      const resultDiv = document.getElementById('result');
+      const substanceInfoDiv = document.getElementById('substanceInfo');
+      const drugImgElement = document.querySelector('#drugImage img');
+      const explanationTextDiv = document.getElementById('explanationText');
+
+      // Manejar el envío del formulario
+      form.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevenir el envío por defecto
+
+        const quantityValue = parseFloat(document.getElementById('quantity').value);
+        const drugTypeSelect = document.getElementById('drugType');
+        const selectedOption = drugTypeSelect.options[drugTypeSelect.selectedIndex];
+
+        // Validaciones básicas
+        if (isNaN(quantityValue) || quantityValue <= 0 || !selectedOption.value) {
+          resultDiv.innerHTML = '<p style="color: red;">Por favor, ingresa los datos correctamente.</p>';
+          substanceInfoDiv.style.display = 'none';
+          return;
+        }
+
+        // Obtener el límite establecido en el atributo data-limit
+        const limit = parseFloat(selectedOption.dataset.limit);
+        const infractionType = quantityValue > limit ? 'penal' : 'administrativa';
+
+        // Mostrar resultado según el tipo de infracción
+        if (infractionType === 'administrativa') {
+          resultDiv.innerHTML = '<p style="color: yellow;">✔ Infracción administrativa.</p>';
+        } else {
+          resultDiv.innerHTML = '<p style="color: red; text-transform: uppercase;">⚠ Infracción penal.</p>';
+          launchConfetti();
+        }
+
+        // Actualizar y mostrar la imagen de la sustancia
+        drugImgElement.src = selectedOption.dataset.image;
+        drugImgElement.alt = selectedOption.text;
+
+        // Actualizar la explicación basada en el atributo data-explanation
+        explanationTextDiv.innerHTML = `<p>${selectedOption.dataset.explanation}</p>`;
+
+        // Mostrar la sección de información de la sustancia (imagen y explicación)
+        substanceInfoDiv.style.display = 'flex';
+      });
+
+      // Función para lanzar el confeti (se ejecuta en infracciones penales)
+      function launchConfetti() {
+        confetti({
+          particleCount: 200,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    });
+  </script>
+
+
+</body></html>
